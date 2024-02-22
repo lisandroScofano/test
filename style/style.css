@@ -2158,7 +2158,7 @@ body.pml-open-site #wrapper {
   height: 670px;
 }
 #iphone .bottom {
-  background: url(test/images/bottom.png) no-repeat;
+  background: url(https://github.com/lisandroScofano/test/blob/master/images/bottom.png) no-repeat;
   height: 152px;
 }
 #iphone #screen {
