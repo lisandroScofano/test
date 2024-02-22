@@ -2149,16 +2149,16 @@ body.pml-open-site #wrapper {
   padding-left: 0.3125rem;
 }
 #iphone .top {
-  background: url(../images/iphone/top.png) no-repeat;
+  background: url(/images/top.png) no-repeat;
   height: 139px;
 }
 #iphone .middle {
-  background: url(../images/iphone/middle.png) no-repeat,
+  background: url(/images/middle.png) no-repeat,
     url(../images/iphone/middle-r.png) 0 0 repeat-y;
   height: 670px;
 }
 #iphone .bottom {
-  background: url(../images/iphone/bottom.png) no-repeat;
+  background: url(/images/bottom.png) no-repeat;
   height: 152px;
 }
 #iphone #screen {
@@ -2280,12 +2280,13 @@ body.pml-open-site #wrapper {
   background: url("../images/iphone/app-bg.jpg") repeat-y;
 }
 #messages-list {
-  overflow: visible;
   padding: 0;
   margin: 0;
   min-height: 560px;
+  max-height: 560px;
   padding: 1.25rem 0 2.5rem 0;
-  overflow: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 #messages-list li {
   list-style: none;
@@ -3285,5 +3286,6 @@ body.pml-open-site #wrapper {
   padding-top: 2.8125rem;
 }
 #iphone-wrap {
-  background: url(../images/backgrounds/bg.jpg);
+ /* background: url(../images/backgrounds/bg.jpg);*/
+ max-height: 20px;
 }
