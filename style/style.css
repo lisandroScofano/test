@@ -2149,16 +2149,16 @@ body.pml-open-site #wrapper {
   padding-left: 0.3125rem;
 }
 #iphone .top {
-  background: url(/images/top.png) no-repeat;
+  background: url(images/top.png) no-repeat;
   height: 139px;
 }
 #iphone .middle {
-  background: url(/images/middle.png) no-repeat,
+  background: url(images/middle.png) no-repeat,
     url(../images/iphone/middle-r.png) 0 0 repeat-y;
   height: 670px;
 }
 #iphone .bottom {
-  background: url(/images/bottom.png) no-repeat;
+  background: url(images/bottom.png) no-repeat;
   height: 152px;
 }
 #iphone #screen {
