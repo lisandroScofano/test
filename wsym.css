@@ -1,0 +1,832 @@
+/*-------------------------------------------------*/
+/* Global config */
+
+:root {
+    font-family: Helvetica;
+    font-size: 15px;
+
+    /* Default values */
+    --message-max_width: 296px;
+    --double-check-display: none;
+    --check-display: none;
+    --message-quote-display: none;
+    --message-fowarded-display: none;
+}
+
+p {
+    padding: 0;
+    margin: 0;
+}
+
+ul {
+    list-style-type: none;
+}
+
+/*-------------------------------------------------*/
+/* Setup colors for light mode */
+
+[theme="light"] {
+    --color-bg-header-footer: #ffffff;
+    --color-ft-header-footer: #000000;
+    --color-bg-messagebox: #ebe6e1;
+    --color-bg-message_r: #dcf8c7;
+    --color-bg-message_l: #ffffff;
+    --color-bg-day: #dbdfeb;
+    --color-ft-message: #000000;
+    --color-ft-message-day: #414350;
+    --color-ft-message-info: rgba(0, 0, 0, 0.5);
+    --color-icons: #53a6fd;
+    --color-message-name: orange;
+    --shadow-box-display: 0px 2px 2px rgba(0, 0, 0, 0.1);
+    --color-signal-empty: #cbc7bc;
+    --color-ft-quote: rgba(0, 0, 0, 0.7);
+}
+
+/*-------------------------------------------------*/
+/* Setup colors for dark mode */
+
+[theme="dark"] {
+    --color-bg-header-footer: #1a1b1c;
+    --color-ft-header-footer: #ffffff;
+    --color-bg-messagebox: #0b0b0d;
+    --color-bg-message_r: #005046;
+    --color-bg-message_l: #363638;
+    --color-bg-day: #1d1d1d;
+    --color-ft-message: #ffffff;
+    --color-ft-message-day: #a5a5a5;
+    --color-ft-message-info: rgba(255, 255, 255, 0.5);
+    --color-icons: #53a6fd;
+    --color-message-name: pink;
+    --shadow-box-display: 0px 2px 2px rgba(0, 0, 0, 0.1);
+    --color-signal-empty: #484849;
+    --color-ft-quote: rgba(255, 255, 255, 0.7);
+}
+
+/*-------------------------------------------------*/
+/* Main layout of the application */
+
+.wsym-app-container {
+    background-color: var(--color-ft-message);
+    position: absolute;
+    left: 0;
+    top: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+
+    border-radius: 40px;
+    border: solid gray 8px;
+
+    display: grid;
+    grid-template-rows: 93px auto 80px;
+    grid-template-columns: auto;
+    grid-template-areas:
+        "wsym-header"
+        "wsym-chatbox"
+        "wsym-footer";
+
+    overflow: hidden;
+}
+
+/*-------------------------------------------------*/
+/* Header configuration */
+
+.wsym-header {
+    grid-area: wsym-header;
+    background-color: var(--color-bg-header-footer);
+    color: var(--color-ft-header-footer);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Row0 configuration (time, notch, internet, etc) */
+
+.wsym-header-row0 {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 30% 1fr 30%;
+    grid-template-areas:
+        "wsym-header-time wsym-header-notch wsym-connection-internet-battery";
+
+    height: 50%;
+    width: 100%;
+}
+
+.wsym-header-row0>div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wsym-header-time {
+    grid-area: wsym-header-time;
+}
+
+.wsym-header-notch {
+    grid-area: wsym-header-notch;
+}
+
+.wsym-connection-internet-battery {
+    grid-area: wsym-connection-internet-battery;
+    gap: 8px;
+
+    position: relative;
+    left: -10px;
+}
+
+/* wifi, 4G and 3G connection configuration */
+
+[connection="wifi"] {
+    --connection-wifi-display: block;
+    --connection-4g-display: none;
+}
+
+[connection="4g"] {
+    --connection-wifi-display: none;
+    --connection-4g-display: block;
+}
+
+/* wifi, 4G and 3G connection toggle */
+
+.wsym-connection-4g {
+    display: var(--connection-4g-display);
+}
+
+.wsym-connection-wifi {
+    display: var(--connection-wifi-display);
+}
+
+/* signal level connection toggle */
+
+[signal-level="1"] {
+    --color-signal1: var(--color-ft-message);
+    --color-signal2: var(--color-signal-empty);
+    --color-signal3: var(--color-signal-empty);
+    --color-signal4: var(--color-signal-empty);
+}
+
+[signal-level="2"] {
+    --color-signal1: var(--color-ft-message);
+    --color-signal2: var(--color-ft-message);
+    --color-signal3: var(--color-signal-empty);
+    --color-signal4: var(--color-signal-empty);
+}
+
+[signal-level="3"] {
+    --color-signal1: var(--color-ft-message);
+    --color-signal2: var(--color-ft-message);
+    --color-signal3: var(--color-ft-message);
+    --color-signal4: var(--color-signal-empty);
+}
+
+[signal-level="4"] {
+    --color-signal1: var(--color-ft-message);
+    --color-signal2: var(--color-ft-message);
+    --color-signal3: var(--color-ft-message);
+    --color-signal4: var(--color-ft-message);
+}
+
+.swym_connection_signal1 {
+    fill: var(--color-signal1);
+}
+
+.swym_connection_signal2 {
+    fill: var(--color-signal2);
+}
+
+.swym_connection_signal3 {
+    fill: var(--color-signal3);
+}
+
+.swym_connection_signal4 {
+    fill: var(--color-signal4);
+}
+
+/* signal level connection toggle */
+
+[battery-level="0"] {
+    --battery-level0-display: block;
+    --battery-level20-display: none;
+    --battery-level25-display: none;
+    --battery-level50-display: none;
+    --battery-level75-display: none;
+    --battery-level100-display: none;
+}
+
+[battery-level="20"] {
+    --battery-level0-display: none;
+    --battery-level20-display: block;
+    --battery-level25-display: none;
+    --battery-level50-display: none;
+    --battery-level75-display: none;
+    --battery-level100-display: none;
+}
+
+[battery-level="25"] {
+    --battery-level0-display: none;
+    --battery-level20-display: none;
+    --battery-level25-display: block;
+    --battery-level50-display: none;
+    --battery-level75-display: none;
+    --battery-level100-display: none;
+}
+
+[battery-level="50"] {
+    --battery-level0-display: none;
+    --battery-level20-display: none;
+    --battery-level25-display: none;
+    --battery-level50-display: block;
+    --battery-level75-display: none;
+    --battery-level100-display: none;
+}
+
+[battery-level="75"] {
+    --battery-level0-display: none;
+    --battery-level20-display: none;
+    --battery-level25-display: none;
+    --battery-level50-display: none;
+    --battery-level75-display: block;
+    --battery-level100-display: none;
+}
+
+[battery-level="100"] {
+    --battery-level0-display: none;
+    --battery-level20-display: none;
+    --battery-level25-display: none;
+    --battery-level50-display: none;
+    --battery-level75-display: none;
+    --battery-level100-display: block;
+}
+
+.wsym-battery-0 {
+    display: var(--battery-level0-display);
+}
+
+.wsym-battery-20 {
+    display: var(--battery-level20-display);
+
+}
+
+.wsym-battery-25 {
+    display: var(--battery-level25-display);
+
+}
+
+.wsym-battery-50 {
+    display: var(--battery-level50-display);
+}
+
+.wsym-battery-75 {
+    display: var(--battery-level75-display);
+}
+
+.wsym-battery-100 {
+    display: var(--battery-level100-display);
+}
+
+/* Row1 configuration (profile, name, etc) */
+
+.wsym-header-row1 {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 10% 1fr 30%;
+    grid-template-areas:
+        "wsym-header-arrow wsym-header-profile-and-name wsym-header-video-and-phone";
+
+    height: 50%;
+    width: 100%;
+}
+
+.wsym-header-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    grid-area: wsym-header-arrow;
+}
+
+.wsym-header-profile-and-name {
+    grid-area: wsym-header-profile-and-name;
+
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 50px 1fr;
+    grid-template-areas:
+        "wsym-header-img wsym-header-name"
+        "wsym-header-img wsym-header-status";
+}
+
+.wsym-header-img-container {
+    grid-area: wsym-header-img;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wsym-header-img {
+    border-radius: 50%;
+    width: 33px;
+    height: 33px;
+    background-color: magenta;
+    font-size: 9px;
+    object-fit: cover;
+}
+
+.wsym-header-name {
+    grid-area: wsym-header-name;
+
+    font-weight: bold;
+    font-size: 14.5px;
+    color: var(--color-ft-message);
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.wsym-header-status {
+    grid-area: wsym-header-status;
+
+    font-size: 11px;
+    color: var(--color-ft-message-info);
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    padding-top: 0px;
+
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.wsym-header-name p {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.wsym-header-status p {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.wsym-header-video-and-phone {
+    grid-area: wsym-header-video-and-phone;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+/*-------------------------------------------------*/
+/* Chatbox configuration */
+
+.wsym-message-box {
+    grid-area: wsym-chatbox;
+    background-color: var(--color-bg-messagebox);
+
+    margin: 0;
+    padding: 10px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    z-index: 0;
+}
+
+.wsym-message-box-shadow {
+    grid-area: wsym-chatbox;
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+
+    pointer-events: none;
+
+    box-shadow:
+        inset 0px 11px 8px -10px rgba(0, 0, 0, 0.2),
+        inset 0px -11px 8px -10px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+
+}
+
+/*-------------------------------------------------*/
+/* Footer configuration */
+
+.wsym-footer {
+    grid-area: wsym-footer;
+    background-color: var(--color-bg-header-footer);
+}
+
+/*-------------------------------------------------*/
+/* Setup message bubble main layout */
+
+[sender="me"] {
+    --message-layout-grid-rows: 1fr;
+    --message-layout-grid-columns: auto auto;
+    --message-layout-grid-template: "wsym-message-body wsym-message-tail";
+    --message-layout-direction: flex-end;
+    --message-bg-color: var(--color-bg-message_r);
+    --mesage-tail-display-right: block;
+    --mesage-tail-display-left: none;
+}
+
+[sender="other"] {
+    --message-layout-grid-rows: 1fr;
+    --message-layout-grid-columns: auto auto;
+    --message-layout-grid-template: "wsym-message-tail wsym-message-body";
+    --message-layout-direction: flex-start;
+    --message-bg-color: var(--color-bg-message_l);
+    --mesage-tail-display-right: none;
+    --mesage-tail-display-left: block;
+}
+
+.wsym-message {
+    color: var(--color-ft-message);
+
+    display: grid;
+    grid-template-rows: var(--message-layout-grid-rows);
+    grid-template-columns: var(--message-layout-grid-columns);
+    grid-template-areas: var(--message-layout-grid-template);
+
+    align-self: var(--message-layout-direction);
+}
+
+/*-------------------------------------------------*/
+/* Setup Message body */
+
+.wsym-message-body {
+    max-width: var(--message-max_width);
+    overflow: hidden;
+
+    grid-area: wsym-message-body;
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    background-color: var(--message-bg-color);
+    border-radius: 12px;
+    
+    box-shadow: var(--shadow-box-display);
+}
+
+.wsym-message-info {
+
+    align-self: flex-end;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    color: var(--color-ft-message-info);
+    font-size: 11px;
+    font-weight: lighter;
+
+    padding: 0px 8px 4px 8px;
+
+}
+
+/* Setup Message check and double check toggle */
+
+[check="sent"] {
+    --double-check-display: none;
+    --check-display: block;
+    --check-color: var(--color-ft-message-info);
+}
+
+
+[check="delivered"] {
+    --double-check-display: block;
+    --check-display: none;
+    --check-color: var(--color-ft-message-info);
+}
+
+[check="read"] {
+    --double-check-display: block;
+    --check-display: none;
+    --check-color: #34b7f1;
+}
+
+.wsym-message-double-check {
+    display: var(--double-check-display);
+}
+
+.wsym-message-double-check path {
+    fill: var(--check-color)
+}
+
+.wsym-message-simple-check {
+    display: var(--check-display);
+}
+
+.wsym-message-simple-check path {
+    fill: var(--check-color)
+}
+
+
+/*-------------------------------------------------*/
+/* Setup Message tail */
+
+.wsym-message-tail {
+    grid-area: wsym-message-tail;
+
+    display: flex;
+    align-items: flex-end;
+
+    position: relative;
+    top: -10px;
+
+    color: var(--message-bg-color);
+}
+
+/* Toggle right and left tail depending of the message position */
+
+.wsym-message-tail-left {
+    display: var(--mesage-tail-display-left);
+}
+
+.wsym-message-tail-right {
+    display: var(--mesage-tail-display-right);
+}
+
+/*-------------------------------------------------*/
+/* Setup fowarded message header */
+
+[forwarded="true"] {
+    --message-fowarded-display: block;
+}
+
+[forwarded="false"] {
+    --message-fowarded-display: none;
+}
+
+/* Toggle fowarded header on and off */
+
+.wsym-message-fowarded {
+    display: var(--message-fowarded-display);
+    padding: 4px 8px 4px 8px;
+}
+
+.wsym-message-fowarded-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+
+    color: var(--color-ft-message-info);
+    font-size: 12px;
+    font-style: italic;
+}
+
+/*-------------------------------------------------*/
+/* Setup Quote message header */
+
+/* quotte toggle */
+
+[quote="message"] {
+    --message-quote-display: flex;
+    --message-quote-image-display: none;
+    --message-qupte-content-display: block;
+    --message-qupte-content-image-display: none;
+    --message-qupte-content-video-display: none;
+    --message-qupte-content-sticker-display: none;
+}
+
+[quote="image"] {
+    --message-quote-display: flex;
+    --message-quote-image-display: block;
+    --message-qupte-content-display: none;
+    --message-qupte-content-image-display: flex;
+    --message-qupte-content-video-display: none;
+    --message-qupte-content-sticker-display: none;
+}
+
+[quote="video"] {
+    --message-quote-display: flex;
+    --message-quote-image-display: block;
+    --message-qupte-content-display: none;
+    --message-qupte-content-image-display: none;
+    --message-qupte-content-video-display: flex;
+    --message-qupte-content-sticker-display: none;
+}
+
+[quote="sticker"] {
+    --message-quote-display: flex;
+    --message-quote-image-display: block;
+    --message-qupte-content-display: none;
+    --message-qupte-content-image-display: none;
+    --message-qupte-content-video-display: none;
+    --message-qupte-content-sticker-display: flex;
+}
+
+.wsym-message-quote {
+    display: var(--message-quote-display);
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+
+    background-color: rgba(0, 0, 0, 0.1);
+
+    box-sizing: border-box;
+    width: 100%;
+
+    border-radius: 12px;
+    border: solid var(--message-bg-color) 3px;
+
+}
+
+.wsym-message-quote-color {
+    width: 4px;
+    height: 100%;
+
+    background-color: var(--color-message-name);
+}
+
+/* name and content of the quoted message config */
+
+.wsym-message-quote-name-and-content {
+    padding: 14px;
+    color: var(--color-ft-quote);
+    font-size: 13px;
+    flex: 1;
+}
+
+.wsym-message-quote-name {
+    padding-bottom: 8px;
+    font-weight: bold;
+    color: var(--color-message-name);
+}
+
+/* quote message, photo, video and sticker toggle */
+
+.wsym-message-quote-content-image {
+    display: var(--message-qupte-content-image-display);
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.wsym-message-quote-content-video {
+    display: var(--message-qupte-content-video-display);
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.wsym-message-quote-content-sticker {
+    display: var(--message-qupte-content-sticker-display);
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.wsym-message-quote-image {
+    display: var(--message-quote-image-display);
+
+    width: 82px;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.wsym-message-quote-content {
+    display: var(--message-qupte-content-display);
+}
+
+/*-------------------------------------------------*/
+/* Setup Video message */
+
+.wsym-message-video-container {
+    position: relative;
+
+    box-sizing: border-box;
+    border: solid var(--message-bg-color) 3px;
+    border-radius: 12px;
+
+    max-width: var(--message-max_width);
+    overflow: hidden;
+}
+
+.wsym-message-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/*-------------------------------------------------*/
+/* Setup Image message */
+
+.wsym-message-image-container {
+    position: relative;
+    
+    box-sizing: border-box;
+    border: solid var(--message-bg-color) 3px;
+    border-radius: 12px;
+
+    max-width: var(--message-max_width);
+    overflow: hidden;
+}
+
+.wsym-message-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.wsym-message-image-shadow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    
+    /*background-color: rgba(255, 0, 255, 0.1);*/
+    background: linear-gradient(-20deg, rgba(0,0,0,0.7), 20%, transparent);
+}
+
+.wsym-message-info-image {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    align-self: flex-end;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    color: white;
+    font-size: 11px;
+    font-weight: lighter;
+
+    padding: 0px 8px 4px 8px;
+}
+
+/* Toggle name header on and off */
+
+.wsym-message-name {
+    font-weight: bold;
+    font-size: 13px;
+    color: var(--color-message-name);
+
+    padding: 8px 8px 4px 8px;
+
+}
+
+/*-------------------------------------------------*/
+/* Setup message content */
+
+.wsym-message-content {
+    padding: 4px 8px 4px 8px;
+}
+
+/*-------------------------------------------------*/
+/* Setup message day indicator */
+
+.wsym-message-day {
+    align-self: center;
+    justify-self: center;
+
+    background-color: var(--color-bg-day);
+    border-radius: 8px;
+
+    padding: 3px 24px 3px 24px;
+    
+    text-align: center;
+    color: var(--color-ft-message-day);
+
+    font-weight: bold;
+    font-size: 12px;
+
+    box-shadow: var(--shadow-box-display);
+}
+
+/*-------------------------------------------------*/
