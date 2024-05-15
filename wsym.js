@@ -1,4 +1,16 @@
 
+function element_request_fullscreen(element) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+    } else if (docElm.webkitRequestFullScreen) {
+        element.webkitRequestFullScreen();
+    }
+}
+
 function register_on_screen_change_event(element, callback) {
     element.addEventListener("fullscreenchange", callback);
     element.addEventListener("mozfullscreenchange", callback);
@@ -120,7 +132,7 @@ function generate_mesage(template, message) {
     if(update_element_display(image_container_element, image_content)) {
         image_element.setAttribute("src", image_content);
         image_element.onclick = function() {
-            image_element.requestFullscreen();
+            element_request_fullscreen(image_element);
         }
         register_on_screen_change_event(image_element, element_fullscreen_change);
     }
@@ -132,7 +144,7 @@ function generate_mesage(template, message) {
     if(update_element_display(video_container_element, video_content)) {
         video_element.setAttribute("src", video_content);
         video_element.onclick = function() {
-            video_element.requestFullscreen();
+            element_request_fullscreen(video_element);
             video_element.play();
         }
         register_on_screen_change_event(video_element, element_fullscreen_change);
