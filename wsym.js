@@ -1,3 +1,28 @@
+
+function register_on_screen_change_event(element, callback) {
+    element.addEventListener("fullscreenchange", callback);
+    element.addEventListener("mozfullscreenchange", callback);
+    element.addEventListener("webkitfullscreenchange", callback);
+    element.addEventListener("msfullscreenchange", callback);
+}
+
+function element_fullscreen_change(event) {
+    const element = event.target;
+
+    if(document.fullscreenElement ||
+       document.webkitFullscreenElement ||
+       document.mozFullScreenElement ||
+       document.msFullscreenElement) {
+
+        // NOTE: element enters full screen
+        element.style.objectFit = "contain"
+    } else {
+        // NOTE: element leave full screen
+        element.style.objectFit = "cover"
+    }
+
+}
+
 function update_element_display(element, content) {
     if(content === null || content === "") {
         element.style.display = "none";
@@ -8,30 +33,51 @@ function update_element_display(element, content) {
     }
 }
 
-// NOTE App container element
-const app_container_element = document.querySelector(".wsym-app-container");
+function update_time_when_message_is_image_only(message) {
+    // NOTE: Update time when message have an image and not text
+    const message_image = message.getAttribute("image-content");
+    // NOTE: Modify position of the message time and check if the image has no message content
+    const text_content = message.getAttribute("text-content");
+    if(text_content !== null) {
+        // NOTE: Update Image info content
+        const message_info = message.querySelector(".wsym-message-info-image");
+        message_info.style.display = "none";
+    } else {
+        if(message_image) {
+            const message_info = message.querySelector(".wsym-message-info");
+            message_info.style.display = "none";
 
-// NOTE: Update image profile
-const header_image_element = document.querySelector(".wsym-header-img");
-const header_image = app_container_element.getAttribute("image");
-header_image_element.setAttribute("src", header_image);
+            // NOTE: Update Image info content
+            const time = message.getAttribute("time");
+            const time_element = message.querySelector(".wsym-message-info-image").querySelector(".wsym-message-time");
+            time_element.innerHTML = time;
+            
+        }
+    }
+}
 
-    // NOTE: Update chat or group name
-const header_name_element = document.querySelector(".wsym-header-name");
-header_name_element.innerHTML = "<p>"+app_container_element.getAttribute("name")+"<p/>";
+function generate_header(app_container_element) {
+    // NOTE: Update time or company
+    const time_or_company_element = document.querySelector(".wsym-header-time");
+    time_or_company_element.innerHTML = "<p>"+app_container_element.getAttribute("time-or-company")+"<p/>";
 
-// NOTE: Update chat status
-const header_status_element = document.querySelector(".wsym-header-status");
-header_status_element.innerHTML = "<p>"+app_container_element.getAttribute("status")+"<p/>";
-const messages = document.getElementsByClassName("wsym-message");
+    // NOTE: Update image profile
+    const header_image_element = document.querySelector(".wsym-header-img");
+    const header_image = app_container_element.getAttribute("image");
+    header_image_element.setAttribute("src", header_image);
 
-// NOTE: Get message template
-const message_template = document.querySelector("#wsym-message-template");
+        // NOTE: Update chat or group name
+    const header_name_element = document.querySelector(".wsym-header-name");
+    header_name_element.innerHTML = "<p>"+app_container_element.getAttribute("name")+"<p/>";
 
-// NOTE: Iterato over each messag and update its content
-for(const message of messages) {
+    // NOTE: Update chat status
+    const header_status_element = document.querySelector(".wsym-header-status");
+    header_status_element.innerHTML = "<p>"+app_container_element.getAttribute("status")+"<p/>";
+}
+
+function generate_mesage(template, message) {
     // NOTE: Add template to message 
-    message.appendChild(message_template.content.cloneNode(true));
+    message.appendChild(template.content.cloneNode(true));
 
     // NOTE: Update message content
     const text_content = message.getAttribute("text-content");
@@ -73,6 +119,10 @@ for(const message of messages) {
     const image_element = message.querySelector(".wsym-message-image");
     if(update_element_display(image_container_element, image_content)) {
         image_element.setAttribute("src", image_content);
+        image_element.onclick = function() {
+            image_element.requestFullscreen();
+        }
+        register_on_screen_change_event(image_element, element_fullscreen_change);
     }
 
     // NOTE: Update Video content
@@ -81,28 +131,38 @@ for(const message of messages) {
     const video_element = message.querySelector(".wsym-message-video");
     if(update_element_display(video_container_element, video_content)) {
         video_element.setAttribute("src", video_content);
-    }
-
-    // NOTE: Update time when message have an image and not text
-    const message_image = message.getAttribute("image-content");
-    // NOTE: Modify position of the message time and check if the image has no message content
-    {
-        if(text_content !== null) {
-            // NOTE: Update Image info content
-            const message_info = message.querySelector(".wsym-message-info-image");
-            message_info.style.display = "none";
-        } else {
-            if(message_image) {
-                const message_info = message.querySelector(".wsym-message-info");
-                message_info.style.display = "none";
-    
-                // NOTE: Update Image info content
-                const time = message.getAttribute("time");
-                const time_element = message.querySelector(".wsym-message-info-image").querySelector(".wsym-message-time");
-                time_element.innerHTML = time;
-                
-            }
+        video_element.onclick = function() {
+            video_element.requestFullscreen();
+            video_element.play();
         }
+        register_on_screen_change_event(video_element, element_fullscreen_change);
     }
 
+    update_time_when_message_is_image_only(message);
+
+    const sticker_content = message.getAttribute("sticker-content");
+    const sticker_element = message.querySelector(".wsym-message-sticker");
+    if(update_element_display(sticker_element, sticker_content)) {
+        sticker_element.setAttribute("src", sticker_content);
+    }
+}
+
+// NOTE App container element
+const app_container_element = document.querySelector(".wsym-app-container");
+generate_header(app_container_element);
+
+// NOTE: Update messagebox wallpaper
+const background_content = app_container_element.getAttribute("background");
+if(background_content !== null) {
+    const message_box = app_container_element.querySelector(".wsym-message-box");
+    message_box.style.backgroundImage = "url("+background_content+")";
+}
+
+// NOTE: Get message template
+const message_template = document.querySelector("#wsym-message-template");
+
+// NOTE: Iterato over each messag and update its content
+const messages = document.getElementsByClassName("wsym-message");
+for(const message of messages) {
+    generate_mesage(message_template, message)
 }
