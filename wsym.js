@@ -230,15 +230,6 @@ function generate_mesage(template, message) {
         register_on_screen_change_event(video_element, element_fullscreen_change);
     }
 
-    
-    // NOTE: Update Audio content
-    const audio_content = message.getAttribute("audio-content");
-    const audio_container_element = message.querySelector(".wsym-message-audio-container");
-    const audio_element = message.querySelector(".wsym-message-audio");
-    if(update_element_display(audio_container_element, audio_content)) {
-        audio_element.setAttribute("src", audio_content);
-    }
-
     update_time_when_message_is_image_only(message);
 
     const sticker_content = message.getAttribute("sticker-content");
