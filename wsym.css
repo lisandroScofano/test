@@ -22,11 +22,17 @@
     font-family: Helvetica, "emoji";
     font-size: 15px;
 
+    --wsym-resolution-x: 404;
+    --wsym-resolution-x-in-px: 404px;
+
+    --wsym-resolution-y: 760;
+    --wsym-resolution-y-in-px: 760px;
+
     --header-size-in-px: 93px;
     --footer-size-in-px: 80px;
 
     /* Default values */
-    --message-max_width: 296px;
+    --message-max_width: 90%;
     --double-check-display: none;
     --check-display: none;
     --message-quote-display: none;
@@ -65,6 +71,9 @@ ul {
     --color-ft-quote: rgba(0, 0, 0, 0.7);
     --default-background: url("./images/light_background.png");
     --color-border-footer-input: #dedfe0;
+    --audio-image: url("./images/audio_content_light.png");
+    --audio-image-lighter: url("./images/audio_content_lighter_light.png");
+    --audio-thumb-color: black;
 }
 
 /*-------------------------------------------------*/
@@ -87,22 +96,39 @@ ul {
     --color-ft-quote: rgba(255, 255, 255, 0.7);
     --default-background: url("./images/dark_background.png");
     --color-border-footer-input: #4b4b4d;
+    --audio-image: url("./images/audio_content_dark.png");
+    --audio-image-lighter: url("./images/audio_content_lighter_dark.png");
+    --audio-thumb-color: white;
+}
+
+.wsym-aspect-ratio-container {
+    background-color: transparent;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /*-------------------------------------------------*/
 /* Main layout of the application */
 
 .wsym-app-container {
+
     background-color: var(--color-ft-message);
-    position: absolute;
-    left: 0;
-    top: 0;
+
     box-sizing: border-box;
-    width: 100%;
-    height: 100%;
 
     border-radius: 40px;
-    border: solid gray 8px;
+    border: solid gray 4px;
+
+    width: var(--wsym-resolution-x-in-px);
 
     display: grid;
     grid-template-rows: var(--header-size-in-px) auto var(--footer-size-in-px);
@@ -113,6 +139,29 @@ ul {
         "wsym-footer";
 
     overflow: hidden;
+
+    position: relative;
+
+    height: 100%;
+    width: auto;
+    aspect-ratio: calc(var(--wsym-resolution-x) / var(--wsym-resolution-y));
+
+    /*
+    height: 100%;
+    width: 404px;
+    aspect-ratio: 1;
+    */
+}
+
+@media (aspect-ratio < 0.53) {
+    .wsym-aspect-ratio-container {
+    }
+    .wsym-app-container {
+        height: auto;
+        width: 100%;
+        aspect-ratio: calc(var(--wsym-resolution-x) / var(--wsym-resolution-y));
+    
+    }
 }
 
 /*-------------------------------------------------*/
@@ -160,6 +209,14 @@ ul {
     grid-area: wsym-header-notch;
     z-index: 4;
 }
+
+/*
+@media (max-width: 240px) {
+    .wsym-header-notch svg {
+        display: none;
+    }
+}
+*/
 
 .wsym-connection-internet-battery {
     grid-area: wsym-connection-internet-battery;
@@ -488,7 +545,7 @@ ul {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 24px;
+    gap: 20%;
 }
 
 /*-------------------------------------------------*/
@@ -516,17 +573,15 @@ ul {
 .wsym-message-box-shadow {
     grid-area: wsym-chatbox;
 
-    position: absolute;
     width: 100%;
     height: 100%;
-    left: 0;
-    top: 0;
 
     pointer-events: none;
 
     box-shadow:
         inset 0px 11px 8px -10px rgba(0, 0, 0, 0.2),
         inset 0px -11px 8px -10px rgba(0, 0, 0, 0.2);
+
     z-index: 1;
 
 }
@@ -582,6 +637,17 @@ ul {
 }
 
 /*-------------------------------------------------*/
+/* Setup Message sender image */
+
+.wsym-message-sender-image {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 4px;
+}
+
+/*-------------------------------------------------*/
 /* Setup Message body */
 
 .wsym-message[video-content] {
@@ -611,6 +677,8 @@ ul {
     border-radius: 12px;
     
     box-shadow: var(--shadow-box-display);
+
+    max-width: 100%;
 }
 
 /*-------------------------------------------------*/
@@ -877,10 +945,11 @@ ul {
 .wsym-message-video-container {
     position: relative;
 
-    margin: -4px;
     border-radius: 8px;
 
-    max-width: var(--message-max_width);
+    margin: -4px;
+    width: calc(100% + 8px);
+
     overflow: hidden;
 
     background-color: grey;
@@ -933,8 +1002,10 @@ ul {
 .wsym-message-image-container {
     position: relative;
 
-    margin: -4px;
     border-radius: 8px;
+
+    margin: -4px;
+    width: calc(100% + 8px)
 
     max-width: var(--message-max_width);
     overflow: hidden;
@@ -1077,7 +1148,7 @@ ul {
 
 .wsym-footer-camera {
     grid-area: wsym-footer-camera;
-    gap: 30px;
+    gap: 20%;
     position: relative;
     top:4px;
 }
@@ -1114,15 +1185,140 @@ ul {
 
 /*-------------------------------------------------*/
 /* Audio message */
+.wsym-message-audio-container {
+    
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;;
 
+    width: calc(var(--message-max_width) * 1);
+}
+
+.wsym-message-audio-container div{
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px
+}
+
+.wsym-message-audio-container img {
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+
+    position: relative;
+    top: 10px;
+}
+
+.wsym-message-audio-container button {
+    border: 0;
+    background-color: transparent;
+
+}
+
+.wsym-message-audio-play {
+    display: block;
+}
+
+.wsym-message-audio-pause {
+    display: none;
+}
+
+.wsym-message-audio-container svg rect {
+    fill: var(--audio-thumb-color);
+}
+
+.wsym-message-audio-container svg path {
+    fill: var(--audio-thumb-color);
+}
+
+.wsym-message-audio-container p{
+    position: relative;
+    left: 80px;
+    font-size: 11px;
+    color: var(--color-ft-message-info);
+}
+
+.wsym-message-audio-container input {
+    display: block;
+    background-color: var(--message-bg-color);
+    width: 177px;
+    height: 26px;
+}
+
+/* Firefox track stlye */
+
+.wsym-message-audio-container ::-moz-range-track {
+    background-color: transparent;
+    background-image: var(--audio-image-lighter);
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+}
+
+.wsym-message-audio-container ::-moz-range-progress {
+    background-color: transparent;
+    background-image: var(--audio-image);
+    height: 100%;
+    width: 100%;
+}
+
+.wsym-message-audio-container ::-moz-range-thumb {
+    background-color: var(--audio-thumb-color);
+    
+    width: 11px;
+    height: 11px;
+    
+    border-radius: 50px;
+    border: 0px;
+
+    margin: 0;
+    padding: 0;
+}
+
+/* Chrome track stlye */
+
+.wsym-message-audio-container ::-webkit-slider-runnable-track {
+   -webkit-appearance: none;
+
+    height: 100%;
+    width: 100%;
+
+    background-image: var(--audio-image-lighter);
+    background-size: cover;
+    background-color: var(--message-bg-color);
+}
+
+.wsym-message-audio-container  ::-webkit-slider-thumb {
+    -webkit-appearance: none;
+
+    width: 11px;
+    height: 11px;
+    
+    border-radius: 50px;
+    border: 0px;
+
+    margin: 0;
+    padding: 0;
+
+    position: relative;
+    top: 5px;
+}
 
 /*-------------------------------------------------*/
 /* Fullscreen container */
 .wsym-fullscreen-container {
     background-color: rgba(0, 0, 0, 0.85);
+    
     position: absolute;
     left: 0px;
     top: 0px;
+
     width: 100%;
     height: 100%;
     z-index: 3;

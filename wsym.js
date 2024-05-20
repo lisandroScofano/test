@@ -89,14 +89,14 @@ function element_request_fullscreen(element, message) {
     fullscreen_name.innerHTML = "Tú";
 }
 
-function update_element_display(element, content) {
+function update_element_display(element, content, display) {
     if(element === null) return;
 
     if(content === null || content === "") {
         element.style.display = "none";
         return false;
     } else {
-        element.style.display = "block";
+        element.style.display = display;
         return true;
     }
 }
@@ -114,28 +114,101 @@ function arrow_was_click() {
 }
 
 //////////////////////////////////////////////////////////////
+// Audio functions
+
+function audio_duration_to_html(duration) {
+    const minutes = Math.floor(duration / 60);
+    const seconds = Math.floor(duration % 60);
+    const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+    return minutes+":"+returnedSeconds;
+}
+
+let play_state = "pause";
+
+//////////////////////////////////////////////////////////////
 // Generate messages
 
-function update_time_when_message_is_image_only(message) {
+let color_index = 0;
+const sender_name_map = {};
+
+function register_new_color(name) {
+
+
+    const app_container_element = document.querySelector(".wsym-app-container");
+    const theme = app_container_element.getAttribute("theme");
+    
+    let colors = null;
+
+    if(theme === "light") {
+        colors = ["#D6C52F", "#20990E", "#DB1105", "#CE1761", "#0B390B", "#AB37C3", "#9F99A3", "#504857", "#3E8A7E"];
+    } else {
+        colors = ["#EEE938", "#FC87C0", "#49CB26", "#B3E5A6", "#FB7874", "#F183FD", "#FDBFD8", "#CAC4D2", "#84DACB"];
+    }
+
+    color = colors[color_index];
+    sender_name_map[name] = color;
+    color_index = (color_index + 1) % colors.length;
+
+    return color;
+}
+
+function update_sender_name_color(name_element, name) {
+
+
+    // NOTE: register name to always use the same color
+    let color = sender_name_map[name]
+
+    if(color === undefined) {
+        color = register_new_color(name)
+    }
+
+    name_element.style.color = color;
+}
+
+function update_quote_name_color(quote_name_element, quote_color, quote_name) {
+
+    if(quote_name === null) return
+    let color = sender_name_map[quote_name];
+
+
+    if(color === undefined) {
+        color = register_new_color(quote_name)
+    }
+
+    console.log("name: " + quote_name);
+    console.log("color: " + color);
+
+    quote_name_element.style.color = color;
+    quote_color.style.backgroundColor = color
+}
+
+function update_time_when_message_is_image_or_video_only(message) {
     // NOTE: Update time when message have an image and not text
     const message_image = message.getAttribute("image-content");
+    const message_video = message.getAttribute("video-content");
+   
+    let container = null;
+    if(message_image !== null) {
+        container = message.querySelector(".wsym-message-image-container");
+    } else if(message_video !== null) {
+        container = message.querySelector(".wsym-message-video-container");
+    } else {
+        return;
+    }
+
     // NOTE: Modify position of the message time and check if the image has no message content
     const text_content = message.getAttribute("text-content");
     if(text_content !== null) {
-        // NOTE: Update Image info content
-        const message_info = message.querySelector(".wsym-message-info-image");
+        const message_info = container.querySelector(".wsym-message-info-image");
         message_info.style.display = "none";
     } else {
-        if(message_image) {
-            const message_info = message.querySelector(".wsym-message-info");
-            message_info.style.display = "none";
+        const message_info = message.querySelector(".wsym-message-info");
+        message_info.style.display = "none";
 
-            // NOTE: Update Image info content
-            const time = message.getAttribute("time");
-            const time_element = message.querySelector(".wsym-message-info-image").querySelector(".wsym-message-time");
-            time_element.innerHTML = time;
-            
-        }
+        // NOTE: Update Image info content
+        const time = message.getAttribute("time");
+        const time_element = container.querySelector(".wsym-message-info-image").querySelector(".wsym-message-time");
+        time_element.innerHTML = time;
     }
 }
 
@@ -162,18 +235,32 @@ function generate_mesage(template, message) {
     // NOTE: Add template to message 
     message.appendChild(template.content.cloneNode(true));
 
+    // NOTE: Update message sender image
+    const sender_image_content = message.getAttribute("sender-image");
+    const sender_image_element = message.querySelector(".wsym-message-sender-image");
+    if(update_element_display(sender_image_element, sender_image_content, "block")) {
+        sender_image_element.setAttribute("src", sender_image_content);
+
+        // NOTE: Check if the message has tail, if not hide the image
+        const tail = message.getAttribute("tail");
+        if(tail === "false") {
+            sender_image_element.style.visibility = "hidden";
+        }
+    }
+
     // NOTE: Update message content
     const text_content = message.getAttribute("text-content");
     const text_element = message.querySelector(".wsym-message-content");
-    if(update_element_display(text_element, text_content)) {
+    if(update_element_display(text_element, text_content, "block")) {
         text_element.innerHTML = "<p>"+text_content+"</p>";
     }
 
     // NOTE: Update message name
     const sender_name_content = message.getAttribute("sender-name");
     const sender_name_element = message.querySelector(".wsym-message-name");
-    if(update_element_display(sender_name_element, sender_name_content)) {
+    if(update_element_display(sender_name_element, sender_name_content, "block")) {
         sender_name_element.innerHTML = sender_name_content;
+        update_sender_name_color(sender_name_element, sender_name_content);
     }
 
     // NOTE: Update message quote
@@ -184,7 +271,9 @@ function generate_mesage(template, message) {
     const quote_name = message.getAttribute("quote-name");
     const quote_name_element = message.querySelector(".wsym-message-quote-name");
     quote_name_element.innerHTML = quote_name;
-
+    const quote_color = message.querySelector(".wsym-message-quote-color")
+    update_quote_name_color(quote_name_element, quote_color, quote_name);
+    
     const quote_image = message.getAttribute("quote-image");
     const quote_image_element = message.querySelector(".wsym-message-quote-image");
     if(quote_image !== null) {
@@ -200,19 +289,18 @@ function generate_mesage(template, message) {
     const image_content = message.getAttribute("image-content");
     const image_container_element = message.querySelector(".wsym-message-image-container");
     const image_element = message.querySelector(".wsym-message-image");
-    if(update_element_display(image_container_element, image_content)) {
+    if(update_element_display(image_container_element, image_content, "block")) {
         image_element.setAttribute("src", image_content);
         image_element.onclick = function() {
             element_request_fullscreen(image_element, message);
         }
-        register_on_screen_change_event(image_element, element_fullscreen_change);
     }
 
     // NOTE: Update Video content
     const video_content = message.getAttribute("video-content");
     const video_container_element = message.querySelector(".wsym-message-video-container");
     const video_element = message.querySelector(".wsym-message-video");
-    if(update_element_display(video_container_element, video_content)) {
+    if(update_element_display(video_container_element, video_content, "block")) {
         video_element.setAttribute("src", video_content);
         video_element.onclick = function() {
             element_request_fullscreen(video_element, message);
@@ -230,7 +318,62 @@ function generate_mesage(template, message) {
         register_on_screen_change_event(video_element, element_fullscreen_change);
     }
 
-    update_time_when_message_is_image_only(message);
+    // NOTE: Update Audio content
+    const audio_content = message.getAttribute("audio-content");
+    const audio_container_element = message.querySelector(".wsym-message-audio-container");
+    const audio_element = message.querySelector(".wsym-message-audio");
+    if(update_element_display(audio_container_element, audio_content, "flex")) {
+        audio_element.setAttribute("src", audio_content);
+        
+        // NOTE: Update audio metadata
+        const duration = audio_container_element.querySelector("p");
+        const slider = audio_container_element.querySelector("input");
+        const button = audio_container_element.querySelector("button");
+
+        audio_element.addEventListener("loadedmetadata", function() {
+            duration.innerHTML = audio_duration_to_html(audio_element.duration);
+            slider.max = audio_element.duration*100;
+        })
+
+        // NOTE: Manage audio events
+        slider.addEventListener("change", function() {
+            audio_element.currentTime = slider.value / 100;
+        });
+
+        audio_element.addEventListener("timeupdate", function() {
+            slider.value = audio_element.currentTime*100;
+        });
+
+        button.addEventListener("click", function() {
+            const play_button = button.querySelector(".wsym-message-audio-play");
+            const pause_button = button.querySelector(".wsym-message-audio-pause");
+
+            if(play_state === "pause") {
+                audio_element.play();
+                play_state = "play";
+                pause_button.style.display = "block";
+                play_button.style.display = "none";
+            } else {
+                audio_element.pause();
+                play_state = "pause";
+                pause_button.style.display = "none";
+                play_button.style.display = "block";
+            }
+        });
+
+        audio_element.addEventListener('ended', function() {
+            const play_button = button.querySelector(".wsym-message-audio-play");
+            const pause_button = button.querySelector(".wsym-message-audio-pause");
+
+            play_state = "pause"
+            pause_button.style.display = "none";
+            play_button.style.display = "block";
+            slider.value = 0;
+        });
+
+    }
+
+    update_time_when_message_is_image_or_video_only(message);
 
     const sticker_content = message.getAttribute("sticker-content");
     const sticker_element = message.querySelector(".wsym-message-sticker");
