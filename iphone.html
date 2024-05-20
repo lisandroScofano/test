@@ -12,15 +12,30 @@
 <body>
     <div class="wsym-app-container" 
          theme="light" 
-         name="Federico"
-         status="en linea"
-         image="./images/profile.png"
-         connection="wifi2" 
-         signal-level="4" 
-         battery-level="20"
-         time-or-company="Claro AR"
-         background="./images/cat.jpg"
+         name="Gonzalo Carballo"
+         status="últ. vez hoy a la(s) 12:54"
+         image="https://www.shutterstock.com/image-photo/profile-picture-smiling-successful-young-260nw-2040223583.jpg"
+         connection="4g" 
+         signal-level="3" 
+         battery-level="75"
+         time-or-company="Personal"
+         background="https://i.pinimg.com/736x/21/e1/e4/21e1e437b81107920ced08b8d1731399.jpg"
     >
+
+        <div class="wsym-fullscreen-container" style="display: none;" >
+            <div class="wsym-fullscreen-container-header">
+                <div class="wsym-fullscreen-name-and-time">
+                    <p class="wsym-fullscreen-name"></p>
+                    <p class="wsym-fullscreen-time"></p>
+                </div>
+            </div>
+            <video controls style="display: none;"></video>
+            <img style="display: none;">
+            <div class="wsym-fullscreen-container-footer">
+            </div>
+            <div class="wsym-fullscreen-container-empty"></div>
+        </div>
+
         <div class="wsym-header">
             <div class="wsym-header-row0">
                 <div class="wsym-header-time">
@@ -119,7 +134,7 @@
                 </div>
             </div>
             <div class="wsym-header-row1">
-                <div class="wsym-header-arrow">
+                <div class="wsym-header-arrow" onclick="arrow_was_click()">
                     <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M0 8.47656C0 8.60026 0.0227865 8.71582 0.0683594 8.82324C0.113932 8.93067 0.182292 9.02995 0.273438 9.12109L8.01758 16.6895C8.19336 16.8652 8.40495 16.9531 8.65234 16.9531C8.82161 16.9531 8.97298 16.914 9.10645 16.8359C9.23991 16.7578 9.34733 16.6521 9.42871 16.5186C9.51009 16.3851 9.55078 16.2338 9.55078 16.0645C9.55078 15.8236 9.46289 15.612 9.28711 15.4297L2.17773 8.47656L9.28711 1.52344C9.46289 1.34115 9.55078 1.12956 9.55078 0.888672C9.55078 0.719401 9.51009 0.568034 9.42871 0.43457C9.34733 0.301107 9.23991 0.195313 9.10645 0.117188C8.97298 0.0390627 8.82161 0 8.65234 0C8.40495 0 8.19336 0.0846353 8.01758 0.253906L0.273438 7.83203C0.182292 7.92318 0.113932 8.02246 0.0683594 8.12988C0.0227865 8.23731 0 8.35287 0 8.47656Z"
@@ -153,123 +168,157 @@
                 </div>
             </div>
         </div>
+
         <ul class="wsym-message-box">
             <div class="wsym-message-box-shadow"></div>
            
             <li class="wsym-message-day">
-                Ayer
+                lunes
             </li>
 
             <li class="wsym-message"
                 sender="other"
                 forwarded="false"
-                text-content="Que tal todo en chile"
-                time="12:45"
+                text-content="Hola Andy querido! Todo en orden??"
+                time="17:45"
+            ></li>
+
+            <li class="wsym-message" 
+                sender="me"
+                forwarded="false"
+                text-content="Gonzaaaa"
+                time="17:51"
+                check="read"
+                tail="false"
+            ></li>
+
+            <li class="wsym-message" 
+                sender="me"
+                forwarded="false"
+                text-content="Todo mas que en orden por suerte, vos?? Que tal todo por ahí?"
+                time="17:51"
+                check="read"
             ></li>
 
             <li class="wsym-message"
                 sender="other"
                 forwarded="false"
-                deleted="true"
-                time="12:45"
+                text-content="Jajajajaja"
+                time="17:53"
+                tail="false"
+            ></li>
+
+            <li class="wsym-message"
+                sender="other"
+                forwarded="false"
+                text-content="Aca andamos, laburando... 😒"
+                time="17:54"
+                tail="false"
+            ></li>
+
+            <li class="wsym-message"
+                sender="other"
+                forwarded="false"
+                text-content="Che, escuchame; la Marti anda preguntando si tenes fotos del casamiento del otro dia"
+                time="17:54"
+                tail="false"
+            ></li>
+
+            <li class="wsym-message"
+                sender="other"
+                forwarded="false"
+                text-content="Creo que vos las sacaste o el tincho, puede ser?? 😬"
+                time="17:54"
             ></li>
 
             <li class="wsym-message" 
                 sender="me"
                 forwarded="false"
-                text-content="mira esto"
-                time="12:46"
+                quote="message"
+                quote-name="Gonzalo Carballo"
+                quote-content="Aca andamos, laburando... 😒"
+                text-content="A esta hora todavia? Jajajaj, mal ahi 🤣🤣🤣"
+                time="17:56"
                 check="read"
+            ></li>
+
+            <li class="wsym-message"
+                sender="other"
+                forwarded="false"
+                text-content="Jajaja no seas malo..."
+                time="17:56"
             ></li>
 
             <li class="wsym-message" 
                 sender="me"
                 forwarded="false"
-                text-content="tienen un local de tesla 😀"
-                video-content="images/test.mp4"
-                time="12:47"
+                text-content="A ver, dejame que me fije... Creo que el Tincho saco varias; pero me las mandó, ahi te digo"
+                time="17:56"
                 check="read"
+                tail="false"
+            ></li>
+
+            <li class="wsym-message" 
+                sender="me"
+                forwarded="false"
+                text-content="Ahí te reenvio variasss"
+                time="17:59"
+                check="read"
+                tail="false"
             ></li>
 
             <li class="wsym-message" 
                 sender="me"
                 forwarded="true"
-                text-content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus, aut iusto beatae quas sed laudantium. Saepe nemo odit cum debitis omnis ipsum dolor quaerat similique. Praesentium labore aliquam rerum dolore?"
-                video-content="images/test.mp4"
-                time="12:47"
+                image-content="./images/cotillon-luminoso-invitados.png"
+                time="18:00"
                 check="read"
+                tail="false"
+            ></li>
+
+            <li class="wsym-message" 
+                sender="me"
+                forwarded="true"
+                image-content="./images/487600.png"
+                time="18:00"
+                check="read"
+                tail="false"
             ></li>
 
             <li class="wsym-message" 
                 sender="me"
                 forwarded="false"
-                text-content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam tempora ab blanditiis! Dolorum quae exercitationem aspernatur in quo quia voluptatibus eaque error numquam rerum, soluta odit sequi neque rem tempora?"
-                time="12:47"
+                text-content="Jajajajja 🥳"
+                time="18:01"
+                check="read"
+                tail="false"
+            ></li>
+
+            <li class="wsym-message" 
+                sender="me"
+                forwarded="false"
+                text-content="Esta es MORTAL, no se si te acordas lo enfiestado que estaba el Tincho en ese momento jajaja 🤪"
+                image-content="./images/176741.png"
+                time="18:03"
                 check="read"
             ></li>
             
             <li class="wsym-message" 
                 sender="other"
                 forwarded="false"
-                text-content="."
-                quote="message"
-                quote-name="Tú"
-                quote-content="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Neque sint, ad in molestiae nemo libero eum cum voluptates quasi? Dolor esse accusamus sapiente ullam eveniet sit quasi mollitia cumque earum?"
-                time="12:48"
-            ></li>
-
-            <li class="wsym-message" 
-                sender="other"
-                forwarded="false"
-                text-content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam illum quod aspernatur, eum, repudiandae ex, accusantium recusandae fugit deleniti consequuntur in aut blanditiis expedita ipsa doloremque esse tenetur et! Voluptatum."
+                text-content="Noooo mira ese FOTÓN"
                 quote="image"
+                quote-image="./images/487600.png"
                 quote-name="Tú"
-                quote-image="./images/test_image.jpg"
-                time="12:48"
+                time="18:15"
+                tail="false"
             ></li>
 
             <li class="wsym-message" 
                 sender="other"
                 forwarded="false"
-                text-content="traeme uno jajajjajajja"
-                time="12:47"
-            ></li>
-
-            <li class="wsym-message" 
-                sender="me"
-                forwarded="false"
-                text-content="dalee, te llevo dos por las dudas"
-                time="12:49"
-                check="read"
-            ></li>
-
-            <li class="wsym-message" 
-                sender="me"
-                forwarded="false"
-                text-content="jajajaja"
-                time="12:50"
-                check="read"
-            ></li>
-
-            <li class="wsym-message" 
-                sender="other"
-                forwarded="false"
-                text-content="este quiero"
-                time="12:51"
-            ></li>
-
-            <li class="wsym-message" 
-                sender="other"
-                forwarded="false"
-                image-content="./images/code.png"
-                time="12:52"
-            ></li>
-
-            <li class="wsym-message" 
-                sender="other"
-                forwarded="false"
-                image-content="./images/harry.jpg"
-                time="12:52"
+                text-content="Mil graciassss"
+                time="18:15"
             ></li>
 
             <li class="wsym-message-day">
@@ -278,35 +327,92 @@
 
             <li class="wsym-message" 
                 sender="me"
-                forwarded="true"
-                text-content="dale, ok. Te aviso cuando llegue a mza para que lo busques"
-                time="12:53"
-                check="sent"
+                forwarded="false"
+                text-content="Y la frutillita del postre, el video que me mandaron recien"
+                time="11:53"
+                check="read"
+                tail="false"
             ></li>
 
             <li class="wsym-message" 
                 sender="me"
-                time="12:53"
-                check="sent"
-                sticker-content="https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/025.png"
+                deleted="true"
+                check="read"
+                tail="false"
+            ></li>
+
+
+            <li class="wsym-message" 
+                sender="me"
+                forwarded="false"
+                video-content="./images/video-_Yoni_Dj.mp4"
+                text-content="Mira que locura"
+                time="11:54"
+                check="read"
+                tail="false"
+            ></li>
+
+            <li class="wsym-message" 
+                sender="me"
+                time="11:54"
+                check="read"
+                sticker-content="./images/Screenshot 2024-05-15 at 21.44.33.png"
+                tail="false"
             ></li>
 
             <li class="wsym-message" 
                 sender="other"
-                quote="video"
-                quote-name="Tú"
-                quote-image="./images/test_image.jpg"
-                text-content="que buen local"
-                sticker-content="https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/025.png"
+                sticker-content="./images/bananeitor.gif"
                 time="12:53"
+                tail="false"
+            ></li>
+
+            <li class="wsym-message" 
+                sender="other"
+                forwarded="false"
+                text-content="😳 Nooo, de donde salio eso?"
+                quote="video"
+                quote-image="./images/Screenshot 2024-05-15 at 21.48.53.png"
+                quote-name="Tú"
+                time="12:53"
+            ></li>
+
+            <li class="wsym-message" 
+                sender="me"
+                forwarded="false"
+                text-content="Me lo mando el Tinchooo"
+                time="13:07"
                 check="sent"
             ></li>
 
         </ul>
         <div class="wsym-footer">
+            <div class="wsym-footer-plus">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 3V21" stroke="#53A6FD" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M3 12L21 12" stroke="#53A6FD" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="wsym-footer-input">
+                <div class="wsym-fotter-input-container">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5 1.5H13C14.933 1.5 16.5 3.067 16.5 5V8.12132C16.5 8.1643 16.4992 8.2072 16.4976 8.25H14C10.8244 8.25 8.25 10.8244 8.25 14V16.5H5C3.067 16.5 1.5 14.933 1.5 13V5C1.5 3.067 3.067 1.5 5 1.5ZM9.75 16.3484C10.3689 16.1601 10.9303 15.8018 11.3652 15.3048L15.634 10.4261C15.8159 10.2182 15.9712 9.99107 16.098 9.75H14C11.6528 9.75 9.75 11.6528 9.75 14V16.3484ZM13 0H5C2.23858 0 0 2.23858 0 5V13C0 15.7614 2.23858 18 5 18H8.73116C10.173 18 11.5446 17.3776 12.494 16.2925L16.7629 11.4138C17.5604 10.5024 18 9.33244 18 8.12132V5C18 2.23858 15.7614 0 13 0Z" fill="#53A6FD"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="wsym-footer-camera">
+                <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.94354 2.53576C8.13337 2.06119 8.593 1.75 9.10413 1.75H12.396C12.9071 1.75 13.3668 2.06119 13.5566 2.53576L14.0537 3.77854C14.1676 4.06329 14.4434 4.25 14.7501 4.25H16.75C18.5449 4.25 20 5.70507 20 7.5V14.5C20 16.2949 18.5449 17.75 16.75 17.75H4.75C2.95507 17.75 1.5 16.2949 1.5 14.5V7.5C1.5 5.70508 2.95508 4.25 4.75 4.25H6.75007C7.05675 4.25 7.33253 4.06329 7.44643 3.77854L7.94354 2.53576ZM9.10413 0.25C7.97965 0.25 6.96845 0.934616 6.55082 1.97868L6.24229 2.75H4.75C2.12665 2.75 0 4.87665 0 7.5V14.5C0 17.1234 2.12665 19.25 4.75 19.25H16.75C19.3734 19.25 21.5 17.1234 21.5 14.5V7.5C21.5 4.87665 19.3734 2.75 16.75 2.75H15.2578L14.9493 1.97868C14.5317 0.934615 13.5205 0.25 12.396 0.25H9.10413ZM14.25 10.25C14.25 12.183 12.683 13.75 10.75 13.75C8.817 13.75 7.25 12.183 7.25 10.25C7.25 8.317 8.817 6.75 10.75 6.75C12.683 6.75 14.25 8.317 14.25 10.25ZM15.75 10.25C15.75 13.0114 13.5114 15.25 10.75 15.25C7.98858 15.25 5.75 13.0114 5.75 10.25C5.75 7.48858 7.98858 5.25 10.75 5.25C13.5114 5.25 15.75 7.48858 15.75 10.25Z" fill="#53A6FD"/>
+                </svg>
+                <svg width="17" height="22" viewBox="0 0 17 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.3548 4.12903V11.5154C11.3548 12.9674 10.1778 14.1444 8.72581 14.1444C7.27383 14.1444 6.09677 12.9674 6.09677 11.5154V4.12903C6.09677 2.67706 7.27383 1.5 8.72581 1.5C10.1778 1.5 11.3548 2.67706 11.3548 4.12903ZM4.59677 4.12903C4.59677 1.84863 6.44541 0 8.72581 0C11.0062 0 12.8548 1.84863 12.8548 4.12903V11.5154C12.8548 13.7958 11.0062 15.6444 8.72581 15.6444C6.44541 15.6444 4.59677 13.7958 4.59677 11.5154V4.12903ZM8.72581 17.8278C5.11048 17.8278 2.25 15.0614 2.25 11.7333H0.75C0.75 15.7205 3.95394 18.9356 7.97581 19.2945V22H9.47581V19.2945C13.4977 18.9356 16.7016 15.7205 16.7016 11.7333H15.2016C15.2016 15.0614 12.3411 17.8278 8.72581 17.8278Z" fill="#53A6FD"/>
+                </svg>
+            </div>
         </div>
+        <div class="wsym-footer-homebar"></div>
     </div>
 
+    
     <template id="wsym-message-template">
         <img class="wsym-message-sticker" src="" alt="">
         <div class="wsym-message-container" >
@@ -373,9 +479,14 @@
                     <img class="wsym-message-quote-image" src="" alt="">
                 </div>
                 <div class="wsym-message-video-container">
-                    <video class="wsym-message-video">
+                    <video preload="metadata" class="wsym-message-video">
                         Your browser does not support the video tag.
                     </video>
+                    <button>
+                        <svg width="15" height="17" viewBox="0 0 15 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.17188 16.5527C1.36719 16.5527 1.55273 16.5185 1.72852 16.4502C1.9043 16.3819 2.08985 16.2891 2.28516 16.1719L13.6719 9.58984C14.082 9.34896 14.3669 9.13575 14.5264 8.9502C14.6859 8.76465 14.7656 8.54167 14.7656 8.28125C14.7656 8.02083 14.6859 7.79785 14.5264 7.6123C14.3669 7.42675 14.082 7.21679 13.6719 6.98242L2.28516 0.390625C2.08985 0.279948 1.9043 0.190429 1.72852 0.12207C1.55273 0.0537108 1.36719 0.0195312 1.17188 0.0195312C0.813804 0.0195312 0.528972 0.146485 0.317383 0.400391C0.105794 0.654297 0 0.99284 0 1.41602V15.1465C0 15.5696 0.105794 15.9098 0.317383 16.167C0.528972 16.4241 0.813804 16.5527 1.17188 16.5527Z" fill="black"/>
+                        </svg>                            
+                    </button>
                 </div>
                 <div class="wsym-message-image-container">
                     <img class="wsym-message-image" src="" alt="">
@@ -396,6 +507,12 @@
                                 fill="currentColor" />
                         </svg>
                     </div>
+                </div>
+                <div class="wsym-message-audio-container">
+                    <button>Play</button>
+                    <input type="range" id="seek-slider" max="100" value="0">
+                    <span>0:00</span>
+                    <audio class="wsym-message-audio" preload="metadata"></audio>
                 </div>
                 <div class="wsym-message-content">
                 </div>
@@ -431,6 +548,7 @@
             </div>
         </div>
     </template>
+
 </body>
 
 </html>

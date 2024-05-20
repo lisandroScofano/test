@@ -1,5 +1,7 @@
+//////////////////////////////////////////////////////////////
+// Full screen Browser API
 
-function element_request_fullscreen(element) {
+function element_request_fullscreen_old(element) {
     if (element.requestFullscreen) {
         element.requestFullscreen();
     } else if (element.msRequestFullscreen) {
@@ -35,7 +37,61 @@ function element_fullscreen_change(event) {
 
 }
 
+//////////////////////////////////////////////////////////////
+// Full screen using modal
+
+const fullscreen_element = document.querySelector(".wsym-fullscreen-container");
+const fullscreen_image = fullscreen_element.querySelector("img");
+const fullscreen_video = fullscreen_element.querySelector("video");
+const fullscreen_content = fullscreen_element.querySelector(".wsym-fullscreen-container-footer");
+const fullscreen_name = fullscreen_element.querySelector(".wsym-fullscreen-name");
+const fullscreen_time = fullscreen_element.querySelector(".wsym-fullscreen-time");;
+
+function element_request_fullscreen(element, message) {
+    
+    // NOTE: display fullscreen modal
+    fullscreen_element.style.display = "block";
+    
+    let content = null;
+    let multimidia_element = null;
+
+    // NOTE: display image or video
+    if(element.nodeName === "IMG") {
+        content = message.getAttribute("image-content");
+        fullscreen_image.style.display = "block";
+        fullscreen_video.style.display = "none";
+        multimidia_element = fullscreen_image;
+    } else if(element.nodeName === "VIDEO") {
+        fullscreen_image.style.display = "none";
+        fullscreen_video.style.display = "block";
+        content = message.getAttribute("video-content");
+        multimidia_element = fullscreen_video;
+    } else {
+        console.log("Cannot fullscreen element: " + element.nodeName);
+        return;
+    }
+    multimidia_element.setAttribute("src", content);
+
+    // NOTE: update message content
+    const text_content = message.getAttribute("text-content");
+    if(text_content !== null) {
+        fullscreen_content.innerHTML = "<p>"+text_content+"</p>";
+    } else {
+        fullscreen_content.innerHTML = null;
+    }
+
+    // NOTE: update message time
+    const time = message.getAttribute("time");
+    fullscreen_time.innerHTML = time;
+
+    // NOTE: update message name
+    const name = document.querySelector(".wsym-app-container").getAttribute("name");
+    fullscreen_name.innerHTML = "Tú";
+}
+
 function update_element_display(element, content) {
+    if(element === null) return;
+
     if(content === null || content === "") {
         element.style.display = "none";
         return false;
@@ -44,6 +100,21 @@ function update_element_display(element, content) {
         return true;
     }
 }
+
+function arrow_was_click() {
+    if(fullscreen_video.style.display === "block") {
+        fullscreen_video.pause();
+    }
+
+    // NOTE: only close the modal if we have a full screen element
+    if(fullscreen_element.style.display === "block") {
+        fullscreen_element.style.display = "none"
+    }
+
+}
+
+//////////////////////////////////////////////////////////////
+// Generate messages
 
 function update_time_when_message_is_image_only(message) {
     // NOTE: Update time when message have an image and not text
@@ -71,7 +142,7 @@ function update_time_when_message_is_image_only(message) {
 function generate_header(app_container_element) {
     // NOTE: Update time or company
     const time_or_company_element = document.querySelector(".wsym-header-time");
-    time_or_company_element.innerHTML = "<p>"+app_container_element.getAttribute("time-or-company")+"<p/>";
+    time_or_company_element.innerHTML = "<p>"+app_container_element.getAttribute("time-or-company")+"</p>";
 
     // NOTE: Update image profile
     const header_image_element = document.querySelector(".wsym-header-img");
@@ -80,11 +151,11 @@ function generate_header(app_container_element) {
 
         // NOTE: Update chat or group name
     const header_name_element = document.querySelector(".wsym-header-name");
-    header_name_element.innerHTML = "<p>"+app_container_element.getAttribute("name")+"<p/>";
+    header_name_element.innerHTML = "<p>"+app_container_element.getAttribute("name")+"</p>";
 
     // NOTE: Update chat status
     const header_status_element = document.querySelector(".wsym-header-status");
-    header_status_element.innerHTML = "<p>"+app_container_element.getAttribute("status")+"<p/>";
+    header_status_element.innerHTML = "<p>"+app_container_element.getAttribute("status")+"</p>";
 }
 
 function generate_mesage(template, message) {
@@ -95,7 +166,7 @@ function generate_mesage(template, message) {
     const text_content = message.getAttribute("text-content");
     const text_element = message.querySelector(".wsym-message-content");
     if(update_element_display(text_element, text_content)) {
-        text_element.innerHTML = text_content;
+        text_element.innerHTML = "<p>"+text_content+"</p>";
     }
 
     // NOTE: Update message name
@@ -132,7 +203,7 @@ function generate_mesage(template, message) {
     if(update_element_display(image_container_element, image_content)) {
         image_element.setAttribute("src", image_content);
         image_element.onclick = function() {
-            element_request_fullscreen(image_element);
+            element_request_fullscreen(image_element, message);
         }
         register_on_screen_change_event(image_element, element_fullscreen_change);
     }
@@ -144,10 +215,28 @@ function generate_mesage(template, message) {
     if(update_element_display(video_container_element, video_content)) {
         video_element.setAttribute("src", video_content);
         video_element.onclick = function() {
-            element_request_fullscreen(video_element);
-            video_element.play();
+            element_request_fullscreen(video_element, message);
+            fullscreen_video.play()
         }
+        
+        // NOTE: Update Video button
+        const button = video_container_element.querySelector("button");
+        button.onclick = function() {
+            element_request_fullscreen(video_element, message);
+            fullscreen_video.play()
+        }
+
+        // NOTE: register element to fullscreen request
         register_on_screen_change_event(video_element, element_fullscreen_change);
+    }
+
+    
+    // NOTE: Update Audio content
+    const audio_content = message.getAttribute("audio-content");
+    const audio_container_element = message.querySelector(".wsym-message-audio-container");
+    const audio_element = message.querySelector(".wsym-message-audio");
+    if(update_element_display(audio_container_element, audio_content)) {
+        audio_element.setAttribute("src", audio_content);
     }
 
     update_time_when_message_is_image_only(message);

@@ -1,9 +1,29 @@
 /*-------------------------------------------------*/
 /* Global config */
 
+@font-face {
+    font-family: "emoji";
+ 
+    src: local('Apple Color Emoji'),
+         local('Android Emoji'),
+         local('Segoe UI Emoji'),
+         local('Noto Color Emoji'),
+         local(EmojiSymbols),
+         local(Symbola);
+ 
+    unicode-range: U+231A-231B, U+23E9-23EC, U+23F0, U+23F3, U+25FD-25FE, U+2614-2615, U+2648-2653, U+267F, U+2693, U+26A1, U+26AA-26AB, U+26BD-26BE, U+26C4-26C5, U+26CE, U+26D4, U+26EA, U+26F2-26F3, U+26F5, U+26FA, U+26FD, U+2705, U+270A-270B, U+2728, U+274C, U+274E, U+2753-2755, U+2757, U+2795-2797, U+27B0, U+27BF, U+2B1B-2B1C, U+2B50, U+2B55, U+FE0F, U+1F004, U+1F0CF, U+1F18E, U+1F191-1F19A, U+1F1E6-1F1FF, U+1F201, U+1F21A, U+1F22F, U+1F232-1F236, U+1F238-1F23A, U+1F250-1F251, U+1F300-1F320, U+1F32D-1F335, U+1F337-1F393, U+1F3A0-1F3CA, U+1F3CF-1F3D3, U+1F3E0-1F3F0, U+1F3F4, U+1F3F8-1F43E, U+1F440, U+1F442-1F4FC, U+1F4FF-1F53D, U+1F54B-1F567, U+1F57A, U+1F595-1F596, U+1F5A4, U+1F5FB-1F64F, U+1F680-1F6CC, U+1F6D0-1F6D2, U+1F6D5-1F6D7, U+1F6DC-1F6DF, U+1F6EB-1F6EC, U+1F6F4-1F6FC, U+1F7E0-1F7EB, U+1F7F0, U+1F90C-1F93A, U+1F93C-1F945, U+1F947-1FA7C, U+1FA80-1FAC5, U+1FACE-1FADB, U+1FAE0-1FAE8, U+1FAF0-1FAF8;
+ 
+    size-adjust: normal;
+    descent-override: normal;
+    ascent-override: normal;
+}
+
 :root {
-    font-family: Helvetica;
+    font-family: Helvetica, "emoji";
     font-size: 15px;
+
+    --header-size-in-px: 93px;
+    --footer-size-in-px: 80px;
 
     /* Default values */
     --message-max_width: 296px;
@@ -12,6 +32,8 @@
     --message-quote-display: none;
     --message-fowarded-display: none;
     --message-deleted-display: none;
+    --message-tail-visibility-right: visible;
+    --message-tail-visibility-left: visible;
 }
 
 p {
@@ -27,7 +49,7 @@ ul {
 /* Setup colors for light mode */
 
 [theme="light"] {
-    --color-bg-header-footer: #ffffff;
+    --color-bg-header-footer: #f6f6f6;
     --color-ft-header-footer: #000000;
     --color-bg-messagebox: #ebe6e1;
     --color-bg-message_r: #dcf8c7;
@@ -41,7 +63,8 @@ ul {
     --shadow-box-display: 0px 2px 2px rgba(0, 0, 0, 0.1);
     --color-signal-empty: #cbc7bc;
     --color-ft-quote: rgba(0, 0, 0, 0.7);
-    --default-background: url("./images/light_background.png")
+    --default-background: url("./images/light_background.png");
+    --color-border-footer-input: #dedfe0;
 }
 
 /*-------------------------------------------------*/
@@ -62,7 +85,8 @@ ul {
     --shadow-box-display: 0px 2px 2px rgba(0, 0, 0, 0.1);
     --color-signal-empty: #484849;
     --color-ft-quote: rgba(255, 255, 255, 0.7);
-    --default-background: url("./images/dark_background.png")
+    --default-background: url("./images/dark_background.png");
+    --color-border-footer-input: #4b4b4d;
 }
 
 /*-------------------------------------------------*/
@@ -81,7 +105,7 @@ ul {
     border: solid gray 8px;
 
     display: grid;
-    grid-template-rows: 93px auto 80px;
+    grid-template-rows: var(--header-size-in-px) auto var(--footer-size-in-px);
     grid-template-columns: auto;
     grid-template-areas:
         "wsym-header"
@@ -121,6 +145,7 @@ ul {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 4;
 }
 
 .wsym-header-time {
@@ -133,6 +158,7 @@ ul {
 
 .wsym-header-notch {
     grid-area: wsym-header-notch;
+    z-index: 4;
 }
 
 .wsym-connection-internet-battery {
@@ -380,6 +406,8 @@ ul {
     justify-content: center;
 
     grid-area: wsym-header-arrow;
+
+    z-index: 4;
 }
 
 .wsym-header-profile-and-name {
@@ -480,7 +508,7 @@ ul {
 
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 5px;
 
     z-index: 0;
 }
@@ -504,14 +532,6 @@ ul {
 }
 
 /*-------------------------------------------------*/
-/* Footer configuration */
-
-.wsym-footer {
-    grid-area: wsym-footer;
-    background-color: var(--color-bg-header-footer);
-}
-
-/*-------------------------------------------------*/
 /* Setup message bubble main layout */
 
 [sender="me"] {
@@ -531,6 +551,17 @@ ul {
     --message-tail-align: row-reverse;
     --message-tail-offset-left:2px;
 }
+
+[tail="false"] {
+    --message-tail-visibility-right: hidden;
+    --message-tail-visibility-left: hidden;
+}
+
+[tail="true"] {
+    --message-tail-visibility-right: visible;
+    --message-tail-visibility-left: visible;
+}
+
 
 .wsym-message {
     color: var(--color-ft-message);
@@ -563,8 +594,6 @@ ul {
 
 .wsym-message-body {
     position: relative;
-
-    width: 100%;
 
     overflow: hidden;
     box-sizing: border-box;
@@ -602,10 +631,12 @@ ul {
 
 .wsym-message-tail-left {
     display: var(--message-tail-display-left);
+    visibility: var(--message-tail-visibility-left);
 }
 
 .wsym-message-tail-right {
     display: var(--message-tail-display-right);
+    visibility: var(--message-tail-visibility-right);
 }
 
 /*-------------------------------------------------*/
@@ -624,7 +655,6 @@ ul {
     color: var(--color-ft-message-info);
     font-size: 11px;
     font-weight: normal;
-
 }
 
 /* Setup Message check and double check toggle */
@@ -783,8 +813,11 @@ ul {
 .wsym-message-quote-image {
     display: var(--message-quote-image-display);
     
-    width: 82px;
-    height: 100%;
+    position: relative;
+    height: 68px;
+    width: 68px;
+
+    object-fit: cover;
 
     align-self: flex-end;
     justify-self: center;
@@ -850,13 +883,15 @@ ul {
     max-width: var(--message-max_width);
     overflow: hidden;
 
+    background-color: grey;
+
 }
 
 .wsym-message-video-container button {
     position: absolute;
     left: calc(50% - 25px);
     top: calc(50% - 25px);
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.8);
     
     border: 0;
     border-radius: 50%;
@@ -868,7 +903,22 @@ ul {
 }
 
 .wsym-message-video-container button:hover {
-    background-color: rgba(180, 180, 180, 0.6);
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+
+.wsym-message-video-container button svg{
+    position: absolute;
+    left: calc(50% - 6px);
+    top: calc(50% - 8px);
+}
+
+.wsym-message-video-container button svg path {
+    fill: rgba(0, 0, 0, 0.8);
+}
+
+.wsym-message-video-container button:hover svg path {
+    fill: rgba(0, 0, 0, 0.6);
 }
 
 .wsym-message-video {
@@ -944,6 +994,7 @@ ul {
     width: 150px;
     height: 100%;
     object-fit: cover;
+    margin-bottom: 4px;
 }
 
 /* Toggle name header on and off */
@@ -979,6 +1030,168 @@ ul {
     font-size: 12px;
 
     box-shadow: var(--shadow-box-display);
+}
+
+
+/*-------------------------------------------------*/
+/* Setup footer */
+
+.wsym-footer {
+    grid-area: wsym-footer;
+    background-color: var(--color-bg-header-footer);
+    
+    display: grid;
+    grid-template-rows: 1fr 5px;
+    grid-template-columns: 15% 1fr 26%;
+    grid-template-areas: 
+        "wsym-footer-plus wsym-footer-input wsym-footer-camera"
+        "asd asd asd";
+
+
+    width: 100%;
+    height: 100%;
+}
+
+.wsym-footer > div {
+    padding-top: 12px;
+
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.wsym-footer-plus {
+
+    grid-area: wsym-footer-plus;
+    position: relative;
+    top:4px;
+}
+
+.wsym-footer-input {
+    grid-area: wsym-footer-input;
+} 
+
+.wsym-footer-camera {
+    grid-area: wsym-footer-camera;
+    gap: 30px;
+    position: relative;
+    top:4px;
+}
+
+.wsym-footer-input > div {
+    width: 100%;
+    height: 30px;
+    background-color: var(--color-bg-message_l);
+    border-radius: 15px;
+    border: solid var(--color-border-footer-input) 1px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    
+    padding-right: 8px;
+
+    position: relative;
+}
+
+.wsym-footer-homebar {
+    position: absolute;
+
+    bottom: 6px;
+    left: calc(50% - 67px);
+
+    width: 134px;
+    height: 5px;
+    border-radius: 100px;
+    background-color: var(--color-ft-message);
+
+    z-index: 4;
+}
+
+/*-------------------------------------------------*/
+/* Audio message */
+
+
+/*-------------------------------------------------*/
+/* Fullscreen container */
+.wsym-fullscreen-container {
+    background-color: rgba(0, 0, 0, 0.85);
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    color: var(--color-ft-message);
+}
+
+.wsym-fullscreen-container-header {
+    height: var(--header-size-in-px);
+    width: 100%;
+    background-color: var(--color-bg-header-footer);
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.wsym-fullscreen-container-footer {
+    height: var(--footer-size-in-px);
+    width: 100%;
+    background-color: transparent;
+
+    overflow: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.wsym-fullscreen-container-footer p {
+    padding: 12px;
+    color: white;
+}
+
+.wsym-fullscreen-container img {
+    width: 100%;
+    height: calc(100% - var(--header-size-in-px) - var(--footer-size-in-px));
+    object-fit: contain;
+}
+
+.wsym-fullscreen-container video {
+    width: 100%;
+    height: calc(100% - var(--header-size-in-px) - var(--footer-size-in-px));
+    object-fit: contain;
+}
+
+.wsym-fullscreen-name-and-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding-bottom: 6px;
+}
+
+.wsym-fullscreen-name {
+    font-size: 14px;
+}
+
+.wsym-fullscreen-time {
+    font-size: 11px;
+}
+
+.wsym-fullscreen-container-empty {
+    width: 100%;
+    height: 20px;
+    background-color: transparent;
 }
 
 /*-------------------------------------------------*/
