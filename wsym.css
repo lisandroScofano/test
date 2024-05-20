@@ -32,7 +32,7 @@
     --footer-size-in-px: 80px;
 
     /* Default values */
-    --message-max_width: 90%;
+    --message-max_width: calc(90% - 24px);
     --double-check-display: none;
     --check-display: none;
     --message-quote-display: none;
@@ -128,8 +128,6 @@ ul {
     border-radius: 40px;
     border: solid gray 4px;
 
-    width: var(--wsym-resolution-x-in-px);
-
     display: grid;
     grid-template-rows: var(--header-size-in-px) auto var(--footer-size-in-px);
     grid-template-columns: auto;
@@ -144,7 +142,7 @@ ul {
 
     height: 100%;
     width: auto;
-    aspect-ratio: calc(var(--wsym-resolution-x) / var(--wsym-resolution-y));
+    aspect-ratio: 0.46;
 
     /*
     height: 100%;
@@ -153,13 +151,13 @@ ul {
     */
 }
 
-@media (aspect-ratio < 0.53) {
+@media (aspect-ratio < 0.46) {
     .wsym-aspect-ratio-container {
     }
     .wsym-app-container {
         height: auto;
         width: 100%;
-        aspect-ratio: calc(var(--wsym-resolution-x) / var(--wsym-resolution-y));
+        aspect-ratio: 0.46;
     
     }
 }
