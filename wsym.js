@@ -326,7 +326,7 @@ function generate_mesage(template, message) {
     const video_element = message.querySelector(".wsym-message-video");
     if(update_element_display(video_container_element, video_content, "block")) {
         
-        let source = "<source playsinline preload=\"metadata\" src=\""+ video_content + "#t0.001\" type=\"video/mp4\"/>";
+        let source = "<source src=\""+ video_content + " type=\"video/mp4\"/>";
         
         console.log(source);
         video_element.innerHTML = source;
