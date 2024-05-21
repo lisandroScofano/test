@@ -228,30 +228,38 @@ function generate_header(app_container_element) {
     header_status_element.innerHTML = "<p>"+app_container_element.getAttribute("status")+"</p>";
 }
 
-function set_video_poster(video) {
+let image_count = 1;
 
-    // Wait until the video metadata is loaded to access duration and dimensions
-    video.addEventListener('loadedmetadata', function() {
+function set_video_poster(poster_element, video) {
+
+    video.addEventListener('loadedmetadata', function(event) {
         
-        video.currentTime = 0.1; // Seek to the first frame
+        video.currentTime = 0.1;
         
         video.addEventListener('seeked', function() {
-            var canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            var context = canvas.getContext('2d');
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
             
-            // Convert the canvas to a data URL (base64 encoded image)
-            var dataURL = canvas.toDataURL();
-            
-            // Set the data URL as the poster attribute
-            video.setAttribute('poster', dataURL);
-            
-            // Reset the video time to the beginning (or desired start point)
-            video.currentTime = 0;
+            if(video.generate_thumbnail == true) {
+                
+                console.log(image_count++);
+
+                var canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                var context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                var dataURL = canvas.toDataURL();
+                
+                poster_element.setAttribute('src', dataURL);
+                
+                video.currentTime = 0;
+                
+                video.generate_thumbnail = false;
+            }
+
         });
     });
+    
 }
 
 function generate_mesage(template, message) {
@@ -322,16 +330,16 @@ function generate_mesage(template, message) {
     // NOTE: Update Video content
     const video_content = message.getAttribute("video-content");
     const video_container_element = message.querySelector(".wsym-message-video-container");
-    const video_element = message.querySelector(".wsym-message-video");
+    const poster_element = message.querySelector(".wsym-message-video");
     if(update_element_display(video_container_element, video_content, "block")) {
         
-        //ideo_element.setAttribute("src", video_content);
+        const video_element = document.createElement("video");
+        video_element.generate_thumbnail = true;
+        video_element.setAttribute("src", video_content);
         
-        let source = "<source src=\""+ video_content +"\" type=\"video/mp4\"/>";
-        video_element.innerHTML = source;
-        set_video_poster(video_element);
+        set_video_poster(poster_element, video_element);
         
-        video_element.onclick = function() {
+        poster_element.onclick = function() {
             element_request_fullscreen(video_element, message);
             fullscreen_video.play()
         }
@@ -345,9 +353,6 @@ function generate_mesage(template, message) {
             }
         }
 
-
-        // NOTE: register element to fullscreen request
-        register_on_screen_change_event(video_element, element_fullscreen_change);
     }
 
     // NOTE: Update Audio content
