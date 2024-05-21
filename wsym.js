@@ -240,8 +240,6 @@ function set_video_poster(poster_element, video) {
             
             if(video.generate_thumbnail == true) {
                 
-                console.log(image_count++);
-
                 var canvas = document.createElement('canvas');
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
@@ -249,7 +247,6 @@ function set_video_poster(poster_element, video) {
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
                 
                 var dataURL = canvas.toDataURL();
-                
                 poster_element.setAttribute('src', dataURL);
                 
                 video.currentTime = 0;
@@ -335,6 +332,7 @@ function generate_mesage(template, message) {
         
         const video_element = document.createElement("video");
         video_element.generate_thumbnail = true;
+        video_element.setAttribute("preload", "metadata");
         video_element.setAttribute("src", video_content);
         
         set_video_poster(poster_element, video_element);

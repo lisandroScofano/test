@@ -955,8 +955,6 @@ ul {
     display: block;
     width: 100%;
     object-fit: contain;
-
-    z-index: 1;
 }
 
 
@@ -971,8 +969,6 @@ ul {
 
     width: 50px;
     height: 50px;
-
-    z-index: 2;
 
     color: black;
 }
@@ -1005,9 +1001,8 @@ ul {
     border-radius: 8px;
 
     margin: -4px;
-    width: calc(100% + 8px)
+    width: calc(100% + 8px);
 
-    max-width: var(--message-max_width);
     overflow: hidden;
     
 }
