@@ -229,28 +229,27 @@ function generate_header(app_container_element) {
 }
 
 function set_video_poster(video) {
-    document.addEventListener('DOMContentLoaded', function() {
+
+    // Wait until the video metadata is loaded to access duration and dimensions
+    video.addEventListener('loadedmetadata', function() {
         
-        // Wait until the video metadata is loaded to access duration and dimensions
-        video.addEventListener('loadedmetadata', function() {
-            video.currentTime = 0.1; // Seek to the first frame
+        video.currentTime = 0.1; // Seek to the first frame
+        
+        video.addEventListener('seeked', function() {
+            var canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            var context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
             
-            video.addEventListener('seeked', function() {
-                var canvas = document.createElement('canvas');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                var context = canvas.getContext('2d');
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                
-                // Convert the canvas to a data URL (base64 encoded image)
-                var dataURL = canvas.toDataURL();
-                
-                // Set the data URL as the poster attribute
-                video.setAttribute('poster', dataURL);
-                
-                // Reset the video time to the beginning (or desired start point)
-                video.currentTime = 0;
-            });
+            // Convert the canvas to a data URL (base64 encoded image)
+            var dataURL = canvas.toDataURL();
+            
+            // Set the data URL as the poster attribute
+            video.setAttribute('poster', dataURL);
+            
+            // Reset the video time to the beginning (or desired start point)
+            video.currentTime = 0;
         });
     });
 }
@@ -326,10 +325,12 @@ function generate_mesage(template, message) {
     const video_element = message.querySelector(".wsym-message-video");
     if(update_element_display(video_container_element, video_content, "block")) {
         
-        //let source = "<source src=\""+ video_content +"\" type=\"video/mp4\"/>";
-        //video_element.innerHTML = source;
-        video_element.setAttribute("src", video_content);
+        //ideo_element.setAttribute("src", video_content);
+        
+        let source = "<source src=\""+ video_content +"\" type=\"video/mp4\"/>";
+        video_element.innerHTML = source;
         set_video_poster(video_element);
+        
         video_element.onclick = function() {
             element_request_fullscreen(video_element, message);
             fullscreen_video.play()
