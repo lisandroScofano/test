@@ -231,6 +231,8 @@ function generate_header(app_container_element) {
 function set_video_poster(video) {
     document.addEventListener('DOMContentLoaded', function() {
         
+        console.log("content loaded!");
+
         // Wait until the video metadata is loaded to access duration and dimensions
         video.addEventListener('loadedmetadata', function() {
             video.currentTime = 0.1; // Seek to the first frame
@@ -327,8 +329,6 @@ function generate_mesage(template, message) {
     if(update_element_display(video_container_element, video_content, "block")) {
         
         let source = "<source src=\""+ video_content + " type=\"video/mp4\"/>";
-        
-        console.log(source);
         video_element.innerHTML = source;
         set_video_poster(video_element);
         video_element.onclick = function() {
