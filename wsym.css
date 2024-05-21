@@ -666,7 +666,7 @@ ul {
     justify-content: center;
     
     padding: 8px;
-    gap: 8px;
+    gap: 4px;
 
     background-color: var(--message-bg-color);
     border-radius: 12px;
@@ -939,7 +939,6 @@ ul {
 
 .wsym-message-video-container {
     position: relative;
-
     border-radius: 8px;
 
     margin: -4px;
@@ -948,7 +947,6 @@ ul {
     overflow: hidden;
 
     background-color: grey;
-
 }
 
 .wsym-message-video {
@@ -999,7 +997,6 @@ ul {
     position: relative;
 
     border-radius: 8px;
-
     margin: -4px;
     width: calc(100% + 8px);
 
