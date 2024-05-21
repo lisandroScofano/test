@@ -326,9 +326,9 @@ function generate_mesage(template, message) {
     const video_element = message.querySelector(".wsym-message-video");
     if(update_element_display(video_container_element, video_content, "block")) {
         
-        let source = "<source src=\""+ video_content +"\" type=\"video/mp4\"/>";
-        console.log(source);
-        video_element.innerHTML = source;
+        //let source = "<source src=\""+ video_content +"\" type=\"video/mp4\"/>";
+        //video_element.innerHTML = source;
+        video_element.setAttribute("src", video_content);
         set_video_poster(video_element);
         video_element.onclick = function() {
             element_request_fullscreen(video_element, message);
