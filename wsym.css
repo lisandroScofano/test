@@ -951,13 +951,14 @@ ul {
 
 }
 
-.wsym-message-video-container video {
+.wsym-message-video {
+    display: block;
+    width: 100%;
+    object-fit: contain;
+
     z-index: 1;
 }
 
-.wsym-message-video-container video img {
-    z-index: 1;
-}
 
 .wsym-message-video-container button {
     position: absolute;
@@ -971,7 +972,7 @@ ul {
     width: 50px;
     height: 50px;
 
-    z-index: 5;
+    z-index: 2;
 
     color: black;
 }
@@ -993,12 +994,6 @@ ul {
 
 .wsym-message-video-container button:hover svg path {
     fill: rgba(0, 0, 0, 0.6);
-}
-
-.wsym-message-video {
-    display: block;
-    width: 100%;
-    object-fit: contain;
 }
 
 /*-------------------------------------------------*/
