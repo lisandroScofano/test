@@ -175,9 +175,6 @@ function update_quote_name_color(quote_name_element, quote_color, quote_name) {
         color = register_new_color(quote_name)
     }
 
-    console.log("name: " + quote_name);
-    console.log("color: " + color);
-
     quote_name_element.style.color = color;
     quote_color.style.backgroundColor = color
 }
@@ -229,6 +226,33 @@ function generate_header(app_container_element) {
     // NOTE: Update chat status
     const header_status_element = document.querySelector(".wsym-header-status");
     header_status_element.innerHTML = "<p>"+app_container_element.getAttribute("status")+"</p>";
+}
+
+function set_video_poster(video) {
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // Wait until the video metadata is loaded to access duration and dimensions
+        video.addEventListener('loadedmetadata', function() {
+            video.currentTime = 0.1; // Seek to the first frame
+            
+            video.addEventListener('seeked', function() {
+                var canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                var context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Convert the canvas to a data URL (base64 encoded image)
+                var dataURL = canvas.toDataURL();
+                
+                // Set the data URL as the poster attribute
+                video.setAttribute('poster', dataURL);
+                
+                // Reset the video time to the beginning (or desired start point)
+                video.currentTime = 0;
+            });
+        });
+    });
 }
 
 function generate_mesage(template, message) {
@@ -301,7 +325,12 @@ function generate_mesage(template, message) {
     const video_container_element = message.querySelector(".wsym-message-video-container");
     const video_element = message.querySelector(".wsym-message-video");
     if(update_element_display(video_container_element, video_content, "block")) {
-        video_element.setAttribute("src", video_content);
+        
+        let source = "<source playsinline preload=\"metadata\" src=\""+ video_content + "#t0.001\" type=\"video/mp4\"/>";
+        
+        console.log(source);
+        video_element.innerHTML = source;
+        set_video_poster(video_element);
         video_element.onclick = function() {
             element_request_fullscreen(video_element, message);
             fullscreen_video.play()
@@ -309,10 +338,13 @@ function generate_mesage(template, message) {
         
         // NOTE: Update Video button
         const button = video_container_element.querySelector("button");
-        button.onclick = function() {
-            element_request_fullscreen(video_element, message);
-            fullscreen_video.play()
+        if(button !== null) {
+            button.onclick = function() {
+                element_request_fullscreen(video_element, message);
+                fullscreen_video.play()
+            }
         }
+
 
         // NOTE: register element to fullscreen request
         register_on_screen_change_event(video_element, element_fullscreen_change);

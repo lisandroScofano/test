@@ -19,20 +19,17 @@
 }
 
 :root {
+    
     font-family: Helvetica, "emoji";
     font-size: 15px;
 
-    --wsym-resolution-x: 404;
-    --wsym-resolution-x-in-px: 404px;
-
-    --wsym-resolution-y: 760;
-    --wsym-resolution-y-in-px: 760px;
-
+    --wsym-aspect-ratio: 0.46;
+    
     --header-size-in-px: 93px;
     --footer-size-in-px: 80px;
 
     /* Default values */
-    --message-max_width: calc(90% - 24px);
+    --message-max_width: 90%;
     --double-check-display: none;
     --check-display: none;
     --message-quote-display: none;
@@ -142,7 +139,7 @@ ul {
 
     height: 100%;
     width: auto;
-    aspect-ratio: 0.46;
+    aspect-ratio: var(--wsym-aspect-ratio);
 
     /*
     height: 100%;
@@ -152,13 +149,9 @@ ul {
 }
 
 @media (aspect-ratio < 0.46) {
-    .wsym-aspect-ratio-container {
-    }
     .wsym-app-container {
         height: auto;
         width: 100%;
-        aspect-ratio: 0.46;
-    
     }
 }
 
@@ -208,13 +201,17 @@ ul {
     z-index: 4;
 }
 
-/*
-@media (max-width: 240px) {
+@media (max-width: 316px) {
     .wsym-header-notch svg {
         display: none;
     }
 }
-*/
+
+@media (max-height: 740px) {
+    .wsym-header-notch svg {
+        display: none;
+    }
+}
 
 .wsym-connection-internet-battery {
     grid-area: wsym-connection-internet-battery;
@@ -954,6 +951,10 @@ ul {
 
 }
 
+.wsym-message-video-container video {
+    z-index: 1;
+}
+
 .wsym-message-video-container button {
     position: absolute;
     left: calc(50% - 25px);
@@ -965,6 +966,8 @@ ul {
 
     width: 50px;
     height: 50px;
+
+    z-index: 2;
 
     color: black;
 }
@@ -1340,13 +1343,23 @@ ul {
 }
 
 .wsym-fullscreen-container-footer {
-    height: var(--footer-size-in-px);
     width: 100%;
     background-color: transparent;
+
+    height: calc(var(--footer-size-in-px) - 20px);
 
     overflow: hidden;
     overflow-y: scroll;
     scrollbar-width: none;
+
+    background-color: transparent;
+}
+
+.wsym-fullscreen-container-empty {
+    width: 100%;
+    height: 20px;
+    
+    background-color: transparent;
 }
 
 .wsym-fullscreen-container-footer p {
@@ -1382,10 +1395,5 @@ ul {
     font-size: 11px;
 }
 
-.wsym-fullscreen-container-empty {
-    width: 100%;
-    height: 20px;
-    background-color: transparent;
-}
 
 /*-------------------------------------------------*/
