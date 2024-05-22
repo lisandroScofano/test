@@ -211,7 +211,6 @@ function update_element_top_and_bottom_margin(element, message) {
     // NOTE: Update element top margin
     const forwarded = message.getAttribute("forwarded");
     const sender_name = message.getAttribute("sender-name");
-    console.log(forwarded);
     if(sender_name !== null || (forwarded === null || forwarded === "true")) {
         element.style.marginTop = 0;
     }
